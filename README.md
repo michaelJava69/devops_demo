@@ -128,5 +128,9 @@ AWS : S3 buckets and Route 53.
       Ansible and Jenkins are hosted on prem whilst Docker Contsainer and Kubernetes are hosted on AWS. AWS S3 bucket version manages the Kops cluster code.
       
   ```
+  Code storage
+  ```bash
+     https://github.com/michaelJava69/devops_demo.git
+  ```
 ## License
  
