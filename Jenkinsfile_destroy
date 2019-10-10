@@ -1,0 +1,85 @@
+pipeline {
+    agent any
+     environment {
+         AWS_BIN = '/usr/local/bin/aws'
+     }
+
+    stages {
+
+        stage('Terraform Destroy') {
+
+            environment {
+                AWS_BIN = '/usr/local/bin/aws'
+            }
+            steps {
+                  echo 'Hello Terraform destroy'
+
+                  withCredentials([[
+                       $class: 'AmazonWebServicesCredentialsBinding',
+                       credentialsId: 'aws-key',
+                       accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                       secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                   ]]) {
+                       
+                       sh '''
+
+                          cp  -Rvp /var/lib/jenkins/kubenetes-build/build1/data .
+                          cp  -Rvp /var/lib/jenkins/kubenetes-build/build1/.terraform .
+                          cp  /var/lib/jenkins/kubenetes-build/build1/versions.tf .
+                          cp  /var/lib/jenkins/kubenetes-build/build1/kubernetes.tf .
+                          cp  /var/lib/jenkins/kubenetes-build/build1/terraform.tfstate .
+                          terraform destroy -auto-approve
+
+                       '''
+                 }
+
+                 echo 'Terraform Destroy success'
+
+
+
+            }
+        }
+
+        stage('KOPS cluster destroy') {
+            environment {
+                AWS_BIN = '/usr/local/bin/aws'
+            }
+            steps {
+                print('Hello KOPS destroy')
+
+                // Permission to execute
+                // sh "chmod +x -R ${env.WORKSPACE}/../${env.JOB_NAME}@script"
+                // Call SH
+                // sh "${env.WORKSPACE}/../${env.JOB_NAME}@script/script.sh"
+                 
+                
+                //env.WORKSPACE = pwd()
+
+                withCredentials([[
+                       $class: 'AmazonWebServicesCredentialsBinding',
+                       credentialsId: 'aws-key',
+                       accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                       secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                ]]) {
+                       
+                       sh './kops/delete-kops.sh'
+
+                 }
+                 echo 'Success Kops destroy'                
+            }
+        }
+
+    }
+    post {
+
+           failure {
+
+               echo      " Job failed try again"
+           }
+           success {
+              echo       " job success cool"
+           }
+
+     }
+
+}

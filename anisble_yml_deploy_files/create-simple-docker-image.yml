@@ -1,0 +1,29 @@
+---
+- hosts: all
+  become: false
+  tasks:
+
+  - name: stop if we have old docker container
+    command: docker stop simple-docker-container
+    ignore_errors: yes
+
+  - name: remove stopped docker container
+    command: docker rm simple-docker-container
+    ignore_errors: yes
+
+  - name: remove current docker image
+    command: docker rmi ugbechie/simple-docker-image:latest
+    ignore_errors: yes
+
+#    register: result
+#    failed_when:
+#      - result.rc == 0
+#      - '"docker" not in result.stdout'
+
+
+
+  - name: pull image on to dockerhub
+    command: docker pull ugbechie/simple-docker-image:latest
+
+  - name: create container from here on
+    command: docker run -d --name simple-docker-container -p 8090:8080 ugbechie/simple-docker-image
