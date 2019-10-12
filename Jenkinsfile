@@ -21,7 +21,7 @@ pipeline {
                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                    ]]) {
-                        sh './kops/kops.sh'
+                        sh 'sudo ./kops/kops.sh'
                  }
 
                  echo 'Hello Kops'
@@ -77,7 +77,7 @@ pipeline {
                        //sh ' chmod u+x versions-1.tf '
                        sh 'terraform init'
                        sh 'terraform 0.12upgrade -force -yes '
-                       sh 'terraform apply -auto-approve'
+                       sh 'sudo terraform apply -auto-approve'
 
 
 
