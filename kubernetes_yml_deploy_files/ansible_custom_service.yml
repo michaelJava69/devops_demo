@@ -3,7 +3,7 @@
   hosts: localhost
   connection: local
   become: true
-  user: root
+  user: jenkins
 
   tasks:
   - name: create a service
