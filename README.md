@@ -97,7 +97,7 @@ AWS : S3 buckets and Route 53.
      This really executes the powerful Kops script that declaratively maos the whole AWS kunbernetes environment
      kops create cluster \
        --name=kops.azuka.tk \                  	1. the name of the cluster, the top level and second level names makeup last part
-       --state=s3://kops.helm.azuka.tk \	2. the is the name of your s3 bucket which stores the cluster configurations that Terraform uses 
+       --state=s3://kops.helm.azuka.tk \	2. Kubernetes records state/cluster info on s3 bucket 
        --authorization RBAC \                   3. Role based access control :restricts system access to authorized users. I tlinks in with AWS IAM
        --zones=eu-central-1a \			4. The zone in which the cluster would resides
        --node-count=2 \				5. Node count
@@ -106,8 +106,8 @@ AWS : S3 buckets and Route 53.
        --master-count=1 \			8. Number of Master nodes
        --dns-zone=kops.azuka.tk \		9. DNS name :the matches your DNS host
        --out=azuka_helm_terraform  \		10. directory for auto genearated Terraform file
-       --target=terraform \			11. Name of terraform file
-         --ssh-public-key=~/.ssh/devops_demo.pub 12. address of the SSH keys that Terraform will use to configure the RBAC
+       --target=terraform \			11. Name of terraform file Kops outputs representation of state 
+       --ssh-public-key=~/.ssh/devops_demo.pub 	12. address of the SSH keys that Terraform will use to configure the RBAC
    
        The Jenkins job will run this script then automatically execute the Terraform script to build the cluster.
   ``` 
