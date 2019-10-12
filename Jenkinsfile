@@ -2,7 +2,6 @@ pipeline {
     agent any
      environment {
          AWS_BIN = '/usr/local/bin/aws'
-         my_stage = 'KOPS'
      }
 
     stages {
@@ -21,7 +20,7 @@ pipeline {
                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                    ]]) {
-                        sh 'sudo ./kops/kops.sh'
+                        sh './kops/kops.sh'
                  }
 
                  echo 'Hello Kops'
@@ -77,7 +76,7 @@ pipeline {
                        //sh ' chmod u+x versions-1.tf '
                        sh 'terraform init'
                        sh 'terraform 0.12upgrade -force -yes '
-                       sh 'sudo terraform apply -auto-approve'
+                       sh 'terraform apply -auto-approve'
 
 
 
@@ -92,7 +91,7 @@ pipeline {
 
                script {
                    //Check for the boolean condition
-                   if (env.my_stage == 'KOPS') {
+                   
                      withCredentials([[
                          $class: 'AmazonWebServicesCredentialsBinding',
                          credentialsId: 'aws-key',
@@ -102,10 +101,6 @@ pipeline {
 
                           sh './kops/delete-kops.sh'
                      }
-
-                     } else {
-
-                  }
                }
            }
            success {
@@ -117,9 +112,9 @@ pipeline {
                   mkdir /var/lib/jenkins/kubenetes-build/build1
                   cp -Rvp  data /var/lib/jenkins/kubenetes-build/build1/
                   cp -Rvp  .terraform /var/lib/jenkins/kubenetes-build/build1/
-                  cp   versions.tf /var/lib/jenkins/kubenetes-build/build1/
-                  cp   kubernetes.tf /var/lib/jenkins/kubenetes-build/build1/
-                  cp   terraform.tfstate /var/lib/jenkins/kubenetes-build/build1/
+                  cp  versions.tf /var/lib/jenkins/kubenetes-build/build1/
+                  cp  kubernetes.tf /var/lib/jenkins/kubenetes-build/build1/
+                  cp  terraform.tfstate /var/lib/jenkins/kubenetes-build/build1/
               '''
            }
 
