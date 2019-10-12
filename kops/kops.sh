@@ -13,7 +13,7 @@ install_kops () {
      --dns-zone=kops.azuka.tk \
      --out=azuka_helm_terraform \
      --target=terraform \
-     --ssh-public-key=~/.ssh/udemy_devopsinuse.pub
+     --ssh-public-key=/var/lib/jenkins/.ssh/udemy_devopsinuse.pub
  
 }
 
