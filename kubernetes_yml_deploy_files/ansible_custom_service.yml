@@ -8,4 +8,4 @@
   tasks:
   - name: create a service
     command: kubectl apply -f custom_service.yml
-     become_user: jenkins
+    user: jenkins
