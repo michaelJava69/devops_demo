@@ -3,8 +3,9 @@
   hosts: localhost
   connection: local
   become: true
-  user: jenkins
+  
 
   tasks:
   - name: create a service
     command: kubectl apply -f custom_service.yml
+     become_user: jenkins
